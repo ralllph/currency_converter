@@ -1,7 +1,9 @@
 package com.task.currencyconverter.dto;
 
 import com.task.currencyconverter.enums.Currency;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;

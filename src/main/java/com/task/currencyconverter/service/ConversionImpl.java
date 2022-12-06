@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
 
@@ -16,10 +17,14 @@ import java.math.BigDecimal;
 @Service
 public class ConversionImpl  implements  ConversionInterface{
 
-    //for api calls.  bean was created in application
+    //for api calls.  bean was created in main springboot application
     RestTemplate restTemplate;
     //environment allows you access variables in application properties e.g apikey
     Environment environment;
+    //another option for ret template is web client
+    //bean was created in the main springboot application
+    WebClient.Builder webClient;
+
 
 
     @Override
@@ -44,6 +49,27 @@ public class ConversionImpl  implements  ConversionInterface{
         //array of objects to contain a response. Object[].class means make it return an array of objects
         //Object[] exchangeResponse = restTemplate.getForObject(url, Object[].class);
         ResponseEntity<Response> response= restTemplate.exchange(url, HttpMethod.GET, requestHeader, Response.class);
-        return response.getBody();
+
+        //using web client instead of rest template
+
+         Response response2 = webClient.build()
+                //we are doing a get
+                .get()
+                //the url
+                .uri(url)
+                .header("Authorization", "Bearer" +" "+ apiKey)
+                 // json type
+                 .accept(MediaType.APPLICATION_JSON)
+                //get the response
+                .retrieve()
+                //Mono is a promise yet to be resolved
+                 //Flux for collection of objects
+                .bodyToMono(Response.class)
+                //block means hold on till you get the response asin promise is resolved
+                .block();
+
+
+        return response2;
+        //return response.getBody();
     }
 }

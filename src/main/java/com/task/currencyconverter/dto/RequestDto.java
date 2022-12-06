@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+
 public class RequestDto {
 
     private Currency sourceCurrency;
@@ -17,4 +18,5 @@ public class RequestDto {
 
 
     private BigDecimal targetAmount;
+
 }
